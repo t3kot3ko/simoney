@@ -5,3 +5,13 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+u = User.find_or_create_by(name: "test", property: 10000)
+
+if u
+	u.plans.destroy_all
+end
+
+[-100, 200, 3000].each do |amount|
+	Plan.create(user: u, amount: amount, planned_at: Date.today + rand(10), category: "aieuo" + rand(10).to_s)
+end

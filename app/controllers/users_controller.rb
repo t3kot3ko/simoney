@@ -10,7 +10,16 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-		
+		monthly_transition = @user.monthly
+		categories = monthly_transition.map{|e| e.first.to_s}
+		data = monthly_transition.map{|e| e.last}
+
+		@graph = LazyHighCharts::HighChart.new("graph") do |f|
+			f.title(text: "Monthly transition")
+			f.xAxis(categories: categories)
+			f.series(name: "remain", yAxis: 0, data: data)
+		end
+
   end
 
 	def history

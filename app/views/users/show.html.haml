@@ -14,6 +14,22 @@
   %br
   = @user.property
 
+%h3 Your Plans
+%table
+  %tr
+    %th Planned At
+    %th Category
+    %th Amount
+  - @user.plans.order(:planned_at).after_today.each do |plan|
+    %tr
+      %th= plan.planned_at
+      %th= plan.category
+      %th= plan.amount
+
+%h3 Monthly transition
+= high_chart("sample", @graph)
+
+
 %h3 Property fix histories
 %table
   %tr

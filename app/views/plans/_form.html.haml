@@ -1,0 +1,23 @@
+= form_for @plan, html: { class: "form form-horizontal plan" } do |f|
+  .form-group
+    = f.label :user_id, class: 'control-label'
+    .controls
+      = f.text_field :user_id, class: 'form-control', required: true
+    = error_span(@plan[:user_id])
+  .form-group
+    = f.label :category, class: 'control-label'
+    .controls
+      = f.text_field :category, class: 'form-control', required: true
+    = error_span(@plan[:category])
+  .form-group
+    = f.label :amount, class: 'control-label'
+    .controls
+      = f.text_field :amount, class: 'form-control', required: true
+    = error_span(@plan[:amount])
+  .form-group
+    = f.label :planned_at, class: 'control-label'
+    .controls
+      = f.text_field :planned_at, class: 'form-control', required: true
+    = error_span(@plan[:planned_at])
+  = f.submit nil,class: 'btn btn-primary'
+  = link_to t('.cancel', :default => t("helpers.links.cancel")), plans_path, :class => 'btn btn-default'

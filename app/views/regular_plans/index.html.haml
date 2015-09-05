@@ -1,0 +1,29 @@
+%h1 Listing regular_plans
+
+%table
+  %thead
+    %tr
+      %th User
+      %th Category
+      %th Amount
+      %th Start date
+      %th Interval
+      %th
+      %th
+      %th
+
+  %tbody
+    - @regular_plans.each do |regular_plan|
+      %tr
+        %td= regular_plan.user
+        %td= regular_plan.category
+        %td= regular_plan.amount
+        %td= regular_plan.start_date
+        %td= regular_plan.interval
+        %td= link_to 'Show', regular_plan
+        %td= link_to 'Edit', edit_regular_plan_path(regular_plan)
+        %td= link_to 'Destroy', regular_plan, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Regular plan', new_regular_plan_path

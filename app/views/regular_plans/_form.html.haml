@@ -1,0 +1,25 @@
+= form_for @regular_plan do |f|
+  - if @regular_plan.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@regular_plan.errors.count, "error")} prohibited this regular_plan from being saved:"
+      %ul
+        - @regular_plan.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :user
+    = f.text_field :user
+  .field
+    = f.label :category
+    = f.text_field :category
+  .field
+    = f.label :amount
+    = f.number_field :amount
+  .field
+    = f.label :start_date
+    = f.date_select :start_date
+  .field
+    = f.label :interval
+    = f.text_field :interval
+  .actions
+    = f.submit 'Save'

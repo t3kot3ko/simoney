@@ -1,0 +1,21 @@
+%p#notice= notice
+
+%p
+  %b User:
+  = @regular_plan.user
+%p
+  %b Category:
+  = @regular_plan.category
+%p
+  %b Amount:
+  = @regular_plan.amount
+%p
+  %b Start date:
+  = @regular_plan.start_date
+%p
+  %b Interval:
+  = @regular_plan.interval
+
+= link_to 'Edit', edit_regular_plan_path(@regular_plan)
+\|
+= link_to 'Back', regular_plans_path

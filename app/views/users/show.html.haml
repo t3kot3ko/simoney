@@ -15,16 +15,20 @@
   = @user.property
 
 %h3 Your Plans
-%table
-  %tr
-    %th Planned At
-    %th Category
-    %th Amount
-  - @user.plans.order(:planned_at).after_today.each do |plan|
+%table.table.table-condensed
+  %tbody
     %tr
-      %th= plan.planned_at
-      %th= plan.category
-      %th= plan.amount
+      %th 計画日
+      %th カテゴリ
+      %th 収支計画
+    - @user.plans.order(:planned_at).after_today.each do |plan|
+      %tr
+        %td= plan.planned_at
+        %td= plan.category
+        - if plan.amount > 0
+          %td.info= plan.amount
+        - else
+          %td.danger= plan.amount
 
 %h3 Monthly transition
 = high_chart("sample", @graph)

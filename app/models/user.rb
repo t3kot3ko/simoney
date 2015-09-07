@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
 	has_many :plans
 	has_many :property_fix_histories
+	has_many :regular_plans
 	
 	def fix_property(new_property)
 		# TODO: these should be executed atmicly
@@ -24,11 +25,22 @@ class User < ActiveRecord::Base
 		return monthly_property_transition
 	end
 
+	# all plans planned during s_date ~ e_date (including RegularPlan)
 	def planned(s_date, e_date)
 		plans = self.plans.order(:planned_at)
 			.where("planned_at >= ?", s_date)
 			.where("planned_at <  ?", e_date)
+
+
 		return plans
+	end
+
+	def regular_planned
+		regular_plans = self.regular_plans.order(:planned_at)
+			.where("planned_at >= ?", s_date)
+			.where("planned_at <  ?", e_date)
+
+		return regular_plans
 	end
 
 end

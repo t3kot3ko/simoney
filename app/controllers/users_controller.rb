@@ -10,7 +10,7 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-		monthly_transition = @user.monthly
+		monthly_transition = @user.monthly_transition
 		categories = monthly_transition.map{|e| e.first.to_s}
 		data = monthly_transition.map{|e| e.last}
 

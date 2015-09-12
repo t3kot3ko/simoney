@@ -46,6 +46,27 @@
         - else
           %td.danger= plan.amount
 
+%h3 Your Regular Plans in this month
+%table.table.table-condensed
+  %tbody
+    %tr
+      %th 計画日
+      %th カテゴリ
+      %th 収支計画
+
+    - s_date = Date.today
+    - e_date = (Date.today - (Date.today.day) + 1) + 1.month
+    %p= s_date
+    %p= e_date
+    - @user.regular_planned(s_date, e_date).each do |planned_at, plans|
+      - plans.each do |plan|
+        %tr
+          %td= planned_at
+          %td= plan.category
+          - if plan.amount > 0
+            %td.info= plan.amount
+          - else
+            %td.danger= plan.amount
 
 %h3 Monthly transition
 = high_chart("sample", @graph)

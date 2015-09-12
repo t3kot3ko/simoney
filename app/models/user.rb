@@ -18,27 +18,36 @@ class User < ActiveRecord::Base
 		monthly_property_transition = []
 		(end_date - today).to_i.times do |i|
 			date = today + i.day
-			sum = planned(begin_date, date).inject(0){|r, ii| r += ii.amount}
+			sum = 0
+
+			# NOTE; too many queries
+			planned(begin_date, date).each do |_, plans|
+				sum += plans.inject(0){|r, ii| r += ii.amount}
+			end
+
+			regular_planned(begin_date, date).each do |_, plans|
+				sum += plans.inject(0){|r, ii| r += ii.amount}
+			end
+
 			monthly_property_transition << [date, property + sum]
 		end
 
 		return monthly_property_transition
 	end
 
-	
 	# all plans planned during s_date ~ e_date (including RegularPlan)
 	def planned(s_date, e_date)
 		plans = self.plans.order(:planned_at)
 			.where("planned_at >= ?", s_date)
 			.where("planned_at <  ?", e_date)
 
-		return plans
+		return plans.group_by(&:planned_at)
 	end
 
 	# TODO: consider return format
 	def regular_planned(s_date, e_date)
 		result = {}
-		regular_plans = self.regular_plans.where("start_date >= ?", s_date)
+		regular_plans = self.regular_plans.where("start_date <= ?", s_date)
 
 		(e_date - s_date).to_i.times do |i|
 			date = s_date + i

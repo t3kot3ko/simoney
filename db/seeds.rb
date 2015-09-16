@@ -8,7 +8,7 @@
 
 User.destroy_all
 
-u = User.find_or_create_by(name: "test", property: 10000)
+u = User.create(name: "test", email: "test@example.com", password: "12345678", property: 10000)
 u.plans.destroy_all
 u.regular_plans.destroy_all
 

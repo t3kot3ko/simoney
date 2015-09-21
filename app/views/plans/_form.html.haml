@@ -1,4 +1,4 @@
-= form_for @plan, html: { class: "form form-horizontal plan" } do |f|
+= form_for @plan, url: {controller: :plans, action: :show}, html: { class: "form form-horizontal plan" } do |f|
   .form-group
     = f.label :user_id, class: 'control-label'
     .controls
@@ -20,4 +20,4 @@
       = f.text_field :planned_at, class: 'form-control', required: true
     = error_span(@plan[:planned_at])
   = f.submit nil,class: 'btn btn-primary'
-  = link_to t('.cancel', :default => t("helpers.links.cancel")), plans_path, :class => 'btn btn-default'
+  = link_to t('.cancel', :default => t("helpers.links.cancel")), user_plans_path, :class => 'btn btn-default'

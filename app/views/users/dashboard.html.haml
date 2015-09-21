@@ -1,0 +1,84 @@
+- model_class = User
+.page-header
+  %h1= "Dashboard"
+
+%h3 Your Name
+%p= @user.name
+
+%h3 Your Property
+%p
+  %strong= model_class.human_attribute_name(:property) + ':'
+  %br
+  = @user.property
+
+%h3 Your Plans
+%table.table.table-condensed
+  %tbody
+    %tr
+      %th 計画日
+      %th カテゴリ
+      %th 収支計画
+    - @user.plans.order(:planned_at).after_today.each do |plan|
+      %tr
+        %td= plan.planned_at
+        %td= plan.category
+        - if plan.amount > 0
+          %td.info= plan.amount
+        - else
+          %td.danger= plan.amount
+
+%h3 Your Plans in this month
+%table.table.table-condensed
+  %tbody
+    %tr
+      %th 計画日
+      %th カテゴリ
+      %th 収支計画
+    - @user.plans.order(:planned_at).after_today.each do |plan|
+      %tr
+        %td= plan.planned_at
+        %td= plan.category
+        - if plan.amount > 0
+          %td.info= plan.amount
+        - else
+          %td.danger= plan.amount
+
+%h3 Your Regular Plans in this month
+%table.table.table-condensed
+  %tbody
+    %tr
+      %th 計画日
+      %th カテゴリ
+      %th 収支計画
+
+    // inline into the controller
+    - s_date = Date.today
+    - e_date = (Date.today - (Date.today.day) + 1) + 1.month
+    - @user.regular_planned(s_date, e_date).each do |planned_at, plans|
+      - plans.each do |plan|
+        %tr
+          %td= planned_at
+          %td= plan.category
+          - if plan.amount > 0
+            %td.info= plan.amount
+          - else
+            %td.danger= plan.amount
+
+%h3 Monthly transition
+= high_chart("sample", @graph)
+
+
+%h3 Property fix histories
+%table
+  %tr
+    %th Fixed at
+    %th New property
+  - @user.property_fix_histories.each do |history|
+    %tr
+      %th= history.created_at
+      %th= history.new_property
+  
+// = link_to t('.back', :default => t("helpers.links.back")), users_path, :class => 'btn btn-default'
+// = link_to t('.edit', :default => t("helpers.links.edit")), edit_user_path(@user), :class => 'btn btn-default'
+// = link_to t('.destroy', :default => t("helpers.links.destroy")), user_path(@user), :method => "delete", :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-danger'
+

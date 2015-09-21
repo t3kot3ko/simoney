@@ -1,10 +1,11 @@
 class PlansController < ApplicationController
+	before_action :authenticate_user!
   before_action :set_plan, only: [:show, :edit, :update, :destroy]
 
   # GET /plans
   # GET /plans.json
   def index
-    @plans = Plan.all
+		@user = current_user
   end
 
   # GET /plans/1
@@ -21,28 +22,12 @@ class PlansController < ApplicationController
   def edit
   end
 
-  # POST /plans
-  # POST /plans.json
-  def create
-    @plan = Plan.new(plan_params)
-
-    respond_to do |format|
-      if @plan.save
-        format.html { redirect_to @plan, notice: 'Plan was successfully created.' }
-        format.json { render :show, status: :created, location: @plan }
-      else
-        format.html { render :new }
-        format.json { render json: @plan.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   # PATCH/PUT /plans/1
   # PATCH/PUT /plans/1.json
   def update
     respond_to do |format|
       if @plan.update(plan_params)
-        format.html { redirect_to @plan, notice: 'Plan was successfully updated.' }
+				format.html { redirect_to user_plan_path(@plan), notice: 'Plan was successfully updated.' }
         format.json { render :show, status: :ok, location: @plan }
       else
         format.html { render :edit }

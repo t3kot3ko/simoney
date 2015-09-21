@@ -1,15 +1,13 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
-
-  # GET /users
-  # GET /users.json
-  def index
-    @users = User.all
-  end
+	before_action :authenticate_user!
+  before_action :set_user
 
   # GET /users/1
   # GET /users/1.json
   def show
+  end
+
+	def dashboard
 		today = Date.today
 		e_date = (today - (today.day - 1)) + 1.month
 
@@ -22,8 +20,7 @@ class UsersController < ApplicationController
 			f.xAxis(categories: categories)
 			f.series(name: "remain", yAxis: 0, data: data)
 		end
-
-  end
+	end
 
 	def history
 		@history = @user
@@ -78,7 +75,7 @@ class UsersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.find(params[:id])
+      @user = current_user
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

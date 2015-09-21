@@ -28,23 +28,15 @@
         %a.navbar-brand(href="#") Simoney
         .navbar-collapse.collapse.navbar-responsive-collapse
           %ul.nav.navbar-nav
-            %li= link_to "Link 1", "/path1"
-            %li= link_to "Link 2", "/path2"
-            %li= link_to "Link 3", "/path3"
-            %li= link_to "Link 3", "/path3"
+            - if user_signed_in?
+              %li= link_to "Dashboard", {controller: :users, action: :dashboard}
+              %li= link_to "Plans", {controller: :plans, action: :index}
+              %li= link_to "Logout", destroy_user_session_path, method: :delete, data: {confirm: "Are you sure to logout?"}
 
     .container
       .row
-        .col-lg-9
-          = bootstrap_flash
-          = yield
-        .col-lg-3
-          .well.sidebar-nav
-            %h3 Sidebar
-            %ul.nav.nav-list
-              %li.nav-header Sidebar
-              %li= link_to "Link 1", "/path1"
-              %li= link_to "Link 2", "/path2"
-              %li= link_to "Link 3", "/path3"
+        // .col-lg-9
+        = bootstrap_flash
+        = yield
       %footer
         %p &copy; Company 2015

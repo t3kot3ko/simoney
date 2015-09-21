@@ -1,12 +1,14 @@
 Rails.application.routes.draw do
 
   devise_for :users
-  resources :regular_plans
 
-	resources :users 
-	resources :properties
+	resource :user,  path: "my" do 
+		resources :regular_plans
+		resources :property_fix_histories
+		resources :plans
 
-	resources :plans
+		get "dashboard"
+	end
 	
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -56,7 +56,7 @@ class UsersController < ApplicationController
   def update
 		new_property = user_params[:property]
 		if @user.fix_property(new_property)
-			redirect_to @user, notice: 'User was successfully updated.'
+			redirect_to dashboard_user_path(@user), notice: 'User was successfully updated.'
 		else
 			render :edit
 		end

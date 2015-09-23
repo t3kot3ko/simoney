@@ -2,70 +2,91 @@
 .page-header
   %h1= "Dashboard"
 
-%h3 Your Name
-%p= @user.name
+.row
+  .col-md-4
+    .alert.alert-dissmissable.alert-success
+      %h2 現在の資産
+      %p.lead= @user.property.to_s + "円"
+      %p= "（最終更新：#{@user.property_fix_histories.last.created_at.to_s} ）"
+  .col-md-4
+    .alert.alert-dissmissable.alert-success
+      %h2 今月の支出予定
+      %table.table.table-bordered
+        %tbody
+          %tr
+            %th 収入
+            %td 10000
+          %tr
+            %th 支出
+            %td 10000
+          %tr
+            %th 見込み
+            %td 10000
+  .col-md-4
+    .alert.alert-dissmissable.alert-success
+      %h2 今週の支出予定
+      %table.table.table-bordered
+        %tbody
+          %tr
+            %th 収入
+            %td 10000
+          %tr
+            %th 支出
+            %td 10000
+          %tr
+            %th 見込み
+            %td 10000
 
-%h3 Your Property
-%p
-  %strong= model_class.human_attribute_name(:property) + ':'
-  %br
-  = @user.property
-
-%h3 Edit your profile and property
-= link_to "aiueo", edit_user_path(@user)
-
-%h3 Your Plans
-%table.table.table-condensed
-  %tbody
-    %tr
-      %th 計画日
-      %th カテゴリ
-      %th 収支計画
-    - @user.plans.order(:planned_at).after_today.each do |plan|
-      %tr
-        %td= plan.planned_at
-        %td= plan.category
-        - if plan.amount > 0
-          %td.info= plan.amount
-        - else
-          %td.danger= plan.amount
-
-%h3 Your Plans in this month
-%table.table.table-condensed
-  %tbody
-    %tr
-      %th 計画日
-      %th カテゴリ
-      %th 収支計画
-    - @user.plans.order(:planned_at).after_today.each do |plan|
-      %tr
-        %td= plan.planned_at
-        %td= plan.category
-        - if plan.amount > 0
-          %td.info= plan.amount
-        - else
-          %td.danger= plan.amount
-
-%h3 Your Regular Plans in this month
-%table.table.table-condensed
-  %tbody
-    %tr
-      %th 計画日
-      %th カテゴリ
-      %th 収支計画
-
-    // inline into the controller
-    - s_date = Date.today
-    - e_date = (Date.today - (Date.today.day) + 1) + 1.month
-    - @user.regular_planned(s_date, e_date).each do |planned_at, plans|
-      - plans.each do |plan|
+.row
+  .col-md-5
+    %h3 今月の支出
+    %table.table.table-striped
+      %tbody
         %tr
-          %td= planned_at
-          %td= plan.category
-          - if plan.amount > 0
-            %td.info= plan.amount
-          - else
-            %td.danger= plan.amount
+          %th 計画日
+          %th カテゴリ
+          %th 収支計画
+        - @user.plans.order(:planned_at).after_today.each do |plan|
+          %tr
+            %td= plan.planned_at
+            %td= plan.category
+            - if plan.amount > 0
+              %td.info= plan.amount
+            - else
+              %td.danger= plan.amount
+
+  .col-md-1
+  .col-md-5
+    %h3 今月の定期支出
+    %table.table.table-striped
+      %tbody
+        %tr
+          %th 計画日
+          %th 
+          %th カテゴリ
+          %th 収支計画
+
+        // inline into the controller
+        - s_date = Date.today
+        - e_date = (Date.today - (Date.today.day) + 1) + 1.month
+        - @user.regular_planned(s_date, e_date).each do |planned_at, plans|
+          - plans.each do |plan|
+            %tr
+              %td= planned_at
+              %td= plan.kind
+              %td= plan.category
+              - if plan.amount > 0
+                %td.info= plan.amount
+              - else
+                %td.danger= plan.amount
+
+%ul.nav.nav-tabs
+  %li.active
+    %a(data-toggle="tab" aria-expanded="true")一覧
+  %li.active
+    %a(data-toggle="tab" aria-expanded="true")グラフ
+  %li.active
+    %a(data-toggle="tab" aria-expanded="true")カレンダー
 
 %h3 Monthly transition
 = high_chart("sample", @graph)

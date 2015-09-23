@@ -1,29 +1,19 @@
-%h1 Listing regular_plans
+.page-header
+  %h2 定期的な収支計画一覧
 
-%table
-  %thead
-    %tr
-      %th User
-      %th Category
-      %th Amount
-      %th Start date
-      %th Interval
-      %th
-      %th
-      %th
-
+%table.table.table-condensed
   %tbody
-    - @regular_plans.each do |regular_plan|
+    %tr
+      %th 開始日と間隔
+      %th カテゴリ
+      %th 収支計画
+    - @regular_plans.order(:start_date).each do |plan|
       %tr
-        %td= regular_plan.user
-        %td= regular_plan.category
-        %td= regular_plan.amount
-        %td= regular_plan.start_date
-        %td= regular_plan.interval
-        %td= link_to 'Show', regular_plan
-        %td= link_to 'Edit', edit_regular_plan_path(regular_plan)
-        %td= link_to 'Destroy', regular_plan, :method => :delete, :data => { :confirm => 'Are you sure?' }
+        %td= interval_string(plan)
+        %td= plan.category
+        - if plan.amount > 0
+          %td.info= plan.amount
+        - else
+          %td.danger= plan.amount
 
-%br
-
-= link_to 'New Regular plan', new_regular_plan_path
+// = link_to 'New Regular plan', new_regular_plan_path

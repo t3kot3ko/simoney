@@ -1,10 +1,11 @@
 class RegularPlansController < ApplicationController
   before_action :set_regular_plan, only: [:show, :edit, :update, :destroy]
+	before_action :authenticate_user!
 
   # GET /regular_plans
   # GET /regular_plans.json
   def index
-    @regular_plans = RegularPlan.all
+		@regular_plans = current_user.regular_plans
   end
 
   # GET /regular_plans/1

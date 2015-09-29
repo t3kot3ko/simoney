@@ -2,7 +2,13 @@ Rails.application.routes.draw do
 
 	root to: 'home#index'
 
-  devise_for :users
+  # devise_for :users
+
+	Rails.application.routes.draw do
+		devise_for :users, controllers: {
+			registrations: 'users/registrations'
+		}
+	end
 
 	resource :user,  path: "my" do 
 		resources :regular_plans

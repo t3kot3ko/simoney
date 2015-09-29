@@ -15,9 +15,6 @@
           // = error_span(@user[:name])
         .form-group
           = submit_tag "ログイン", class: "btn btn-primary"
-          %a.btn.btn-primary 新規登録
+          = link_to "新規登録", new_user_registration_path, class: "btn btn-primary"
 
 
-%h2 calendar sample
-
-#calendar

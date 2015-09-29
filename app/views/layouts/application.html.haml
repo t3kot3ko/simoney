@@ -25,7 +25,12 @@
           %span.icon-bar
           %span.icon-bar
           %span.icon-bar
-        %a.navbar-brand(href="#") Simoney
+
+        - if user_signed_in?
+          %a.navbar-brand(href=dashboard_user_path) Simoney
+        - else
+          %a.navbar-brand(href=root_path) Simoney
+
         .navbar-collapse.collapse.navbar-responsive-collapse
           %ul.nav.navbar-nav
             - if user_signed_in?

@@ -2,14 +2,25 @@ class Users::RegistrationsController < Devise::RegistrationsController
 # before_filter :configure_sign_up_params, only: [:create]
 # before_filter :configure_account_update_params, only: [:update]
 
+	def after_sign_up_path_for(resource)
+		dashboard_user_path
+	end
+
   # GET /resource/sign_up
   # def new
   #   super
   # end
 
-  # POST /resource
+  # POST /users
+  # POST /users.json
   def create
 		super
+
+		user = User.find_by(email: params[:user][:email])
+
+		# Custom fields
+		user.update(name: params[:user][:name])
+		user.fix_property(params[:user][:property])
   end
 
   # GET /resource/edit

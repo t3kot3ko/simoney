@@ -7,7 +7,8 @@
     .alert.alert-dissmissable.alert-success
       %h2 現在の資産
       %p.lead= @user.property.to_s + "円"
-      %p= "（最終更新：#{@user.property_fix_histories.last.created_at.to_s} ）"
+      - unless @user.property_fix_histories.empty?
+        %p= "（最終更新：#{@user.property_fix_histories.last.created_at.to_s} ）"
   .col-md-4
     .alert.alert-dissmissable.alert-success
       %h2 今月の支出予定

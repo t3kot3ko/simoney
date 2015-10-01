@@ -39,6 +39,8 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+		render text: params and return
+
 		new_property = user_params[:property]
 		if @user.fix_property(new_property)
 			redirect_to dashboard_user_path(@user), notice: 'User was successfully updated.'

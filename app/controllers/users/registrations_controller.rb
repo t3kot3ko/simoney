@@ -7,20 +7,25 @@ class Users::RegistrationsController < Devise::RegistrationsController
 	end
 
   # GET /resource/sign_up
-  # def new
-  #   super
-  # end
+  def new
+		super
+  end
 
   # POST /users
   # POST /users.json
   def create
-		super
+		@user = User.new(params.require(:user).permit(:email, :password, :name, :property))
 
-		user = User.find_by(email: params[:user][:email])
+		if saved = @user.save!
+			# Custom fields
+			@user.update(name: params[:user][:name])
+			@user.fix_property(params[:user][:property])
 
-		# Custom fields
-		user.update(name: params[:user][:name])
-		user.fix_property(params[:user][:property])
+			sign_in @user
+			redirect_to controller: "/users", action: :dashboard
+		else
+			render "new"
+		end
   end
 
   # GET /resource/edit

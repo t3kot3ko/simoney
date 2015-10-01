@@ -8,11 +8,9 @@
         .form-group
           %label.control-label メールアドレス
           = text_field :user, :email, class: 'form-control', required: true
-          // = error_span(@user[:name])
         .form-group
           %label.control-label パスワード
           = password_field :user, :password, class: 'form-control', required: true
-          // = error_span(@user[:name])
         .form-group
           = submit_tag "ログイン", class: "btn btn-primary"
           = link_to "新規登録", new_user_registration_path, class: "btn btn-primary"

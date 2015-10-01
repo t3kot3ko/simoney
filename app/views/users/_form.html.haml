@@ -1,4 +1,4 @@
-= form_for @user, html: { class: "form-horizontal"} do |f|
+= form_for @user, url: {controller: "users", action: :update}, html: { class: "form-horizontal"} do |f|
   .form-group
     %label.col-lg-2.control-label ユーザ名
     .col-sm-6
@@ -16,4 +16,4 @@
       = error_span(@user[:property])
 
   = f.submit "更新", class: 'btn btn-primary'
-  = link_to t('.cancel', :default => t("helpers.links.cancel")), dashboard_user_path(@user), :class => 'btn btn-default'
+  = link_to t('.cancel', :default => t("helpers.links.cancel")), dashboard_user_path, :class => 'btn btn-default'

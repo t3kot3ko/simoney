@@ -11,13 +11,13 @@ class Users::SessionsController < Devise::SessionsController
 		auth_params = params.require(:user).permit(:email, :password)
 		user = User.find_by(email: auth_params[:email])
 
-		__invalid_email_or_password unless user
+		return __invalid_email_or_password unless user
 
-		if user.valid_password?(params[:password])
+		if user.valid_password?(auth_params[:password])
 			sign_in(user)
 			redirect_to dashboard_user_path and return
 		else
-			__invalid_email_or_password
+			return __invalid_email_or_password
 		end
   end
 

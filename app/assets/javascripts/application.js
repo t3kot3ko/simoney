@@ -12,6 +12,7 @@
 //
 //= require moment
 //= require jquery
+//= require jquery-ui
 //= require jquery_ujs
 //= require flatly/loader
 //= require flatly/bootswatch

@@ -1,6 +1,30 @@
 class RegularPlansController < ApplicationController
   before_action :set_regular_plan, only: [:show, :edit, :update, :destroy]
 	before_action :authenticate_user!
+	before_action :set_selector_options, only: [:new, :edit]
+	before_action :set_kind_selector_options, only: [:new, :edit]
+
+	def set_selector_options
+		@selector_options = []
+		current_user.categories.each do |category|
+			@selector_options << [category.name, category.id]
+		end
+	end
+
+	# TODO: extract to model or helper
+	def set_kind_selector_options
+		@kind_selector_options = []
+		dict = {
+			"daily" => "毎日",
+			"weekly" => "毎週",
+			"monthly" => "毎月",
+			"yearly" => "毎年",
+		}
+
+		RegularPlan.kinds.each do |key, value|
+			@kind_selector_options << [dict[key], key]
+		end
+	end
 
   # GET /regular_plans
   # GET /regular_plans.json
@@ -39,10 +63,11 @@ class RegularPlansController < ApplicationController
   # POST /regular_plans.json
   def create
     @regular_plan = RegularPlan.new(regular_plan_params)
+		@regular_plan.user = current_user
 
     respond_to do |format|
       if @regular_plan.save
-        format.html { redirect_to @regular_plan, notice: 'Regular plan was successfully created.' }
+        format.html { redirect_to user_regular_plans_path, notice: 'Regular plan was successfully created.' }
         format.json { render :show, status: :created, location: @regular_plan }
       else
         format.html { render :new }
@@ -56,7 +81,7 @@ class RegularPlansController < ApplicationController
   def update
     respond_to do |format|
       if @regular_plan.update(regular_plan_params)
-        format.html { redirect_to @regular_plan, notice: 'Regular plan was successfully updated.' }
+        format.html { redirect_to user_regular_plans_path, notice: 'Regular plan was successfully updated.' }
         format.json { render :show, status: :ok, location: @regular_plan }
       else
         format.html { render :edit }
@@ -83,6 +108,6 @@ class RegularPlansController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def regular_plan_params
-      params.require(:regular_plan).permit(:user_id, :category, :amount, :start_date, :interval)
+      params.require(:regular_plan).permit(:category_id, :amount, :start_date, :kind)
     end
 end

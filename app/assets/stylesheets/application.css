@@ -12,6 +12,7 @@
  *
  *
  *= require_self
+ *= require jquery-ui
  *= require flatly/loader
  *= require flatly/bootswatch
  *= require fullcalendar

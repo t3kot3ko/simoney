@@ -1,25 +1,22 @@
-= form_for @regular_plan do |f|
-  - if @regular_plan.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@regular_plan.errors.count, "error")} prohibited this regular_plan from being saved:"
-      %ul
-        - @regular_plan.errors.full_messages.each do |msg|
-          %li= msg
+= form_for @regular_plan, url: {controller: :regular_plans, action: @regular_plan.persisted? ? :update : :create}, html: { class: "form-horizontal"} do |f|
+  .form-group
+    %label.col-lg-2.control-label カテゴリ
+    .col-sm-6
+      = f.select :category_id, @selector_options, {}, {class: 'form-control'}
+  .form-group
+    %label.col-lg-2.control-label 金額
+    .col-sm-6
+      = f.text_field :amount, class: 'form-control', required: true
+      = error_span(@regular_plan[:amount])
+  .form-group
+    %label.col-lg-2.control-label 開始日と間隔
+    .col-sm-3
+      = f.text_field :start_date, class: 'form-control', required: true, id: "picker_start_date"
+    .col-sm-1
+      %p から
+    .col-sm-2
+      = f.select :kind, @kind_selector_options, {}, {class: 'form-control'}
+      = error_span(@regular_plan[:planned_at])
 
-  .field
-    = f.label :user
-    = f.text_field :user
-  .field
-    = f.label :category
-    = f.text_field :category
-  .field
-    = f.label :amount
-    = f.number_field :amount
-  .field
-    = f.label :start_date
-    = f.date_select :start_date
-  .field
-    = f.label :interval
-    = f.text_field :interval
   .actions
-    = f.submit 'Save'
+    = f.submit 'Save', class: "btn btn-primary"

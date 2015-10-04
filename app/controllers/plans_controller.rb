@@ -1,11 +1,31 @@
 class PlansController < ApplicationController
 	before_action :authenticate_user!
   before_action :set_plan, only: [:show, :edit, :update, :destroy]
+	before_action :set_selector_options, only: [:new, :edit]
+
+	def set_selector_options
+		@selector_options = []
+		current_user.categories.each do |category|
+			@selector_options << [category.name, category.id]
+		end
+	end
 
   # GET /plans
   # GET /plans.json
   def index
-		@user = current_user
+		plans = current_user.plans.order(:planned_at).after_today
+
+		case params[:filter]
+		when "income"
+			@plans = plans.where("amount > 0")
+			@filter = "income"
+		when "expense"
+			@plans = plans.where("amount < 0")
+			@filter = "expense"
+		else 
+			@plans = plans
+			@filter = "all"
+		end
   end
 
   # GET /plans/1
@@ -22,12 +42,27 @@ class PlansController < ApplicationController
   def edit
   end
 
+  def create
+    @plan = Plan.new(plan_params)
+		@plan.user = current_user
+
+    respond_to do |format|
+      if @plan.save
+        format.html { redirect_to user_plans_path, notice: 'Regular plan was successfully created.' }
+        format.json { render :show, status: :created, location: @regular_plan }
+      else
+        format.html { render :new }
+        format.json { render json: @regular_plan.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # PATCH/PUT /plans/1
   # PATCH/PUT /plans/1.json
   def update
     respond_to do |format|
       if @plan.update(plan_params)
-				format.html { redirect_to user_plan_path(@plan), notice: 'Plan was successfully updated.' }
+				format.html { redirect_to user_plans_path, notice: 'Plan was successfully updated.' }
         format.json { render :show, status: :ok, location: @plan }
       else
         format.html { render :edit }
@@ -41,7 +76,7 @@ class PlansController < ApplicationController
   def destroy
     @plan.destroy
     respond_to do |format|
-      format.html { redirect_to plans_url, notice: 'Plan was successfully destroyed.' }
+      format.html { redirect_to user_plans_url, notice: 'Plan was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -54,6 +89,6 @@ class PlansController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def plan_params
-			params[:plan].permit(:user_id, :category, :amount, :planned_at)
+			params[:plan].permit(:category_id, :amount, :planned_at)
     end
 end

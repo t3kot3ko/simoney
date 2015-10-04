@@ -1,19 +1,34 @@
 .page-header
   %h2 定期的な収支計画一覧
 
-%table.table.table-condensed
+%ul.nav.nav-tabs
+  %li(class="#{@filter == "all"    ? "active" : ""}")= link_to("すべて", {})
+  %li(class="#{@filter == "income" ? "active" : ""}")= link_to("収入", {filter: "income"})
+  %li(class="#{@filter == "expense" ? "active" : ""}")= link_to("支出", {filter: "expense"})
+
+%table.table.table-striped
   %tbody
     %tr
       %th 開始日と間隔
       %th カテゴリ
       %th 収支計画
+      %th
+      %th
+
     - @regular_plans.order(:start_date).each do |plan|
       %tr
         %td= interval_string(plan)
-        %td= plan.category
+        %td= plan.category.name
         - if plan.amount > 0
-          %td.info= plan.amount
+          %td.text-info
+            %strong= plan.amount
+            円
         - else
-          %td.danger= plan.amount
+          %td.text-danger
+            %strong= plan.amount
+            円
+
+        %td= link_to("編集", edit_user_regular_plan_path(plan))
+        %td= link_to("削除", user_regular_plan_path(plan), method: :delete, data: {confirm: "Are you sure to delete?"})
 
 // = link_to 'New Regular plan', new_regular_plan_path

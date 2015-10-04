@@ -5,8 +5,21 @@ class RegularPlansController < ApplicationController
   # GET /regular_plans
   # GET /regular_plans.json
   def index
-		@regular_plans = current_user.regular_plans
-  end
+		f = params[:filter]
+		regular_plans = current_user.regular_plans
+
+		case f 
+		when "income"
+			@regular_plans = regular_plans.where("amount > 0")
+			@filter = "income"
+		when "expense"
+			@regular_plans = regular_plans.where("amount < 0")
+			@filter = "expense"
+		else 
+			@regular_plans = regular_plans
+			@filter = "all"
+		end
+	end
 
   # GET /regular_plans/1
   # GET /regular_plans/1.json

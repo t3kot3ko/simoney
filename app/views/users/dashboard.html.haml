@@ -8,7 +8,7 @@
       %h2 現在の資産
       %p.lead= @user.property.to_s + "円"
       - unless @user.property_fix_histories.empty?
-        %p= "（最終更新：#{@user.property_fix_histories.last.created_at.to_s} ）"
+        %p= "（最終更新：#{@user.property_fix_histories.last.created_at.strftime("%Y-%m-%d")} ）"
   .col-md-4
     .alert.alert-dissmissable.alert-success
       %h2 今月の支出予定
@@ -40,7 +40,7 @@
 
 .row
   .col-md-5
-    %h3 今月の支出
+    %h3= "#{Date.today.month}月の支出"
     %table.table.table-striped
       %tbody
         %tr
@@ -50,15 +50,19 @@
         - @user.plans.order(:planned_at).after_today.each do |plan|
           %tr
             %td= plan.planned_at
-            %td= plan.category
+            %td= plan.category.name
             - if plan.amount > 0
-              %td.info= plan.amount
+              %td.text-info 
+                %strong= plan.amount
+                円
             - else
-              %td.danger= plan.amount
+              %td.text-danger
+                %strong= plan.amount
+                円
 
   .col-md-1
   .col-md-5
-    %h3 今月の定期支出
+    %h3= "#{Date.today.month}月の定期支出"
     %table.table.table-striped
       %tbody
         %tr
@@ -75,11 +79,15 @@
             %tr
               %td= planned_at
               %td= plan.kind
-              %td= plan.category
+              %td= plan.category.name
               - if plan.amount > 0
-                %td.info= plan.amount
+                %td.text-info 
+                  %strong= plan.amount
+                  円
               - else
-                %td.danger= plan.amount
+                %td.text-danger
+                  %strong= plan.amount
+                  円
 
 %ul.nav.nav-tabs
   %li.active

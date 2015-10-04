@@ -19,6 +19,9 @@
 *.swp
 *.swo
 
+# for MySQL workbench backup
+*.bak
+
 .ruby-version
 
 vendor/assets/bower_components

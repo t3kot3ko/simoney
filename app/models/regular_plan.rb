@@ -1,6 +1,7 @@
 class RegularPlan < ActiveRecord::Base
 	enum kind: %i(daily weekly monthly yearly)
   belongs_to :user
+	belongs_to :category
 
 	def adapted?(date)
 		start_date = self.start_date

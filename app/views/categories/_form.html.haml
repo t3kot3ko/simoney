@@ -1,0 +1,10 @@
+- action = @category.persisted? ? :update : :create
+= form_for @category, url: {controller: "categories", action: action}, html: { class: "form-horizontal"} do |f|
+  .form-group
+    %label.col-lg-2.control-label カテゴリ名
+    .col-sm-6
+      = f.text_field :name, class: 'form-control', required: true
+      = error_span(@category[:name])
+
+  = f.submit @category.persisted? ? "更新" : "作成", class: 'btn btn-primary'
+  = link_to t('.cancel', :default => t("helpers.links.cancel")), dashboard_user_path, :class => 'btn btn-default'

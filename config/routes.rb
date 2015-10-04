@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 		resources :regular_plans
 		resources :property_fix_histories
 		resources :plans
+		resources :categories
 
 		get "dashboard"
 	end

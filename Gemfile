@@ -55,6 +55,8 @@ gem "bower-rails"
 gem "twitter-bootswatch-rails"
 gem "twitter-bootswatch-rails-helpers"
 
+gem "jquery-ui-rails"
+
 group :dvelopment do 
 	gem "guard"
 	gem "guard-livereload"

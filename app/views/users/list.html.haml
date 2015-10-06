@@ -1,0 +1,54 @@
+.page-title
+  %h1 一覧
+
+.row
+  .col-md-5
+    %h3= "#{Date.today.month}月の支出"
+    %table.table.table-striped
+      %tbody
+        %tr
+          %th 計画日
+          %th 定期
+          %th カテゴリ
+          %th 収支計画
+          %th 残高
+        - balance = @property
+        - @all_plans.each do |date, plans|
+          - [plans.first].each do |plan|
+            %tr
+              %td= date
+              %td= plan.respond_to?(:kind) ? plan.kind : ""
+              %td= plan.category.name
+              - if plan.amount > 0
+                %td.text-info 
+                  %span.glyphicon.glyphicon-plus
+                  %strong= plan.amount
+                  円
+              - else
+                %td.text-danger
+                  %span.glyphicon.glyphicon-minus
+                  %strong= plan.amount.abs
+                  円
+              - balance += plan.amount
+              %td
+                %strong= balance
+                円
+          - plans[1..-1].each do |plan|
+            %tr
+              %td
+              %td= plan.respond_to?(:kind) ? plan.kind : ""
+              %td= plan.category.name
+              - if plan.amount > 0
+                %td.text-info 
+                  %span.glyphicon.glyphicon-plus
+                  %strong= plan.amount
+                  円
+              - else
+                %td.text-danger
+                  %span.glyphicon.glyphicon-minus
+                  %strong= plan.amount.abs
+                  円
+              - balance += plan.amount
+              %td
+                %strong= balance
+                円

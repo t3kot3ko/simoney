@@ -22,6 +22,11 @@ class UsersController < ApplicationController
 		end
 	end
 
+	def list
+		@all_plans = current_user.plans.order(:planned_at).after_today.group_by(&:planned_at)
+		@property = current_user.property
+	end
+
 	def history
 		@history = @user
 	end

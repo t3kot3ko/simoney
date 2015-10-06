@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 		resources :categories
 
 		get "dashboard"
+		get "list"
 	end
 	
   # The priority is based upon order of creation: first created -> highest priority.

@@ -20,4 +20,19 @@ class RegularPlan < ActiveRecord::Base
 			raise "invalid kind"
 		end 
 	end
+
+	def interval
+		if self.daily?
+			"毎日"
+		elsif self.weekly?
+			"毎週"
+		elsif self.monthly?
+			"毎週"
+		elsif self.yearly?
+			"毎週"
+		else
+			raise "invalid kind"
+		end 
+	end
+
 end

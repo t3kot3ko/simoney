@@ -7,18 +7,65 @@ class UsersController < ApplicationController
   def show
   end
 
+	def __transition(user, s_date, e_date)
+		history = user.property_fix_histories.where("fixed_date >= ? and fixed_date <= ?", s_date, e_date).group_by(&:fixed_date)
+
+		plans = user.planned(s_date, e_date)
+		regular_plans = user.regular_planned(s_date, e_date)
+
+		transition = {}
+		property = nil
+		(s_date .. e_date).each do |date|
+			if history[date] && (h = history[date].first)
+				property = h.new_property
+			end
+
+			if property
+				sum = 0
+				if ps = plans[date]
+					sum += ps.inject(0){|r, i| r += i.amount}
+				end
+
+				if rps = regular_plans[date]
+					sum += rps.inject(0){|r, i| r += i.amount}
+				end
+
+				property += sum
+				transition[date] = [property, sum]
+			else
+				transition[date] = nil
+			end
+		end
+
+		return transition
+	end
+
 	def dashboard
+		today = Date.today
+		@s_date = today - (today.day - 1)
+		@e_date = @s_date + 1.month - 1
+		@history = current_user.property_fix_histories.where("fixed_date >= ? and fixed_date <= ?", @s_date, @e_date).group_by(&:fixed_date)
+
+		# TODO: duplicated!
+		@plans = current_user.planned(@s_date, @e_date)
+		@regular_plans = current_user.regular_planned(@s_date, @e_date)
+
+		@balance_transition = __transition(current_user, @s_date, @e_date)
+
+		return 
+
 		today = Date.today
 		e_date = (today - (today.day - 1)) + 1.month
 
 		monthly_transition = @user.monthly_transition(today, e_date)
-		categories = monthly_transition.map{|e| e.first.to_s}
+		categories = monthly_transition.map{|e| e.first.strftime("%d")}
 		data = monthly_transition.map{|e| e.last}
 
+		@all_plans = current_user.plans.order(:planned_at).after_today.group_by(&:planned_at)
+		@property = current_user.property
 		@graph = LazyHighCharts::HighChart.new("graph") do |f|
-			f.title(text: "Monthly transition")
 			f.xAxis(categories: categories)
-			f.series(name: "remain", yAxis: 0, data: data)
+			f.series(name: "残高", yAxis: 0, data: data)
 		end
 	end
 
@@ -44,11 +91,9 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-		render text: params and return
-
 		new_property = user_params[:property]
 		if @user.fix_property(new_property)
-			redirect_to dashboard_user_path(@user), notice: 'User was successfully updated.'
+			redirect_to dashboard_user_path, notice: 'User was successfully updated.'
 		else
 			render :edit
 		end

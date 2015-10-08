@@ -38,68 +38,88 @@
             %th 見込み
             %td 10000
 
+
 .row
-  .col-md-5
-    %h3= "#{Date.today.month}月の支出"
-    %table.table.table-striped
+  %h3= "#{Date.today.month}月の収支計画 2"
+  .col-md-12
+    %table.table.table-bordered
       %tbody
         %tr
           %th 計画日
+          %th 定期
           %th カテゴリ
-          %th 収支計画
-        - @user.plans.order(:planned_at).after_today.each do |plan|
-          %tr
-            %td= plan.planned_at
-            %td= plan.category.name
-            - if plan.amount > 0
-              %td.text-info 
-                %strong= plan.amount
-                円
-            - else
-              %td.text-danger
-                %strong= plan.amount
-                円
+          %th 金額
+          %th 小計
+          %th 残高
 
-  .col-md-1
-  .col-md-5
-    %h3= "#{Date.today.month}月の定期支出"
-    %table.table.table-striped
-      %tbody
-        %tr
-          %th 計画日
-          %th 
-          %th カテゴリ
-          %th 収支計画
+        - (@s_date..@e_date).each do |date|
+          - if @history[date] && (h = @history[date].first)
+            %tr.danger
+              %td= date.strftime("%m/%d (%a)")
+              %td(colspan=2) 残高修正
+              %td= h.new_property
+              %td -
+              %td= h.new_property
 
-        // inline into the controller
-        - s_date = Date.today
-        - e_date = (Date.today - (Date.today.day) + 1) + 1.month
-        - @user.regular_planned(s_date, e_date).each do |planned_at, plans|
-          - plans.each do |plan|
+          - plans = @plans[date] || []
+          - regular_plans = @regular_plans[date] || []
+          - appended = plans + regular_plans
+
+          - [appended.first].compact.each do |plan|
             %tr
-              %td= planned_at
-              %td= plan.kind
+              %td(rowspan="#{plans.count + regular_plans.count}" vertical-align="middle")= date.strftime("%m/%d (%a)")
+
+              %td= plan.interval
+              %td= plan.category.name
+              - if (amount = plan.amount) > 0
+                %td.text-info 
+                  %span.glyphicon.glyphicon-plus
+                  %strong= amount.abs
+                  円
+              - else
+                %td.text-danger
+                  %span.glyphicon.glyphicon-minus
+                  %strong= amount.abs
+                  円
+              - if transition = @balance_transition[date]
+                - balance, sum = *transition
+                // 小計
+                - if sum > 0
+                  %td.text-info(rowspan="#{plans.count + regular_plans.count}")
+                    %span.glyphicon.glyphicon-plus
+                    %strong= sum.abs
+                    円
+                - else
+                  %td.text-danger(rowspan="#{plans.count + regular_plans.count}")
+                    %span.glyphicon.glyphicon-minus
+                    %strong= sum.abs
+                    円
+                // 残高
+                %td(rowspan="#{plans.count + regular_plans.count}")
+                  - if balance
+                    %strong= balance
+                    円
+                  - else
+                    %strong -
+              - else
+                %td
+                %td
+
+          - (appended[1..-1] || []).each do |plan|
+            %tr
+              %td= plan.interval
               %td= plan.category.name
               - if plan.amount > 0
                 %td.text-info 
+                  %span.glyphicon.glyphicon-plus
                   %strong= plan.amount
                   円
               - else
                 %td.text-danger
-                  %strong= plan.amount
+                  %span.glyphicon.glyphicon-minus
+                  %strong= plan.amount.abs
                   円
-
-%ul.nav.nav-tabs
-  %li.active
-    %a(data-toggle="tab" aria-expanded="true")一覧
-  %li.active
-    %a(data-toggle="tab" aria-expanded="true")グラフ
-  %li.active
-    %a(data-toggle="tab" aria-expanded="true")カレンダー
-
-%h3 Monthly transition
-= high_chart("sample", @graph)
-
+            
 
 %h3 Property fix histories
 %table

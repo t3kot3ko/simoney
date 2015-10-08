@@ -8,12 +8,17 @@ class User < ActiveRecord::Base
 	has_many :regular_plans
 	has_many :categories
 
+	# TODO: handle `fixed_date` field
 	def fix_property(new_property)
 		# TODO: these should be executed atmicly
-		PropertyFixHistory.create(user: self, new_property: new_property)
-		self.update(property: new_property)
+		current = self.property
+		if current != new_property
+			PropertyFixHistory.create(user: self, new_property: new_property)
+			self.update(property: new_property)
+		end
 	end
 
+	# TODO: remove
 	def monthly_transition(s_date = Date.today, e_date = nil)
 		today = Date.today
 		# begin_date = Date.new(today.year, today.month, 1)
@@ -39,7 +44,8 @@ class User < ActiveRecord::Base
 		return monthly_property_transition
 	end
 
-	# all plans planned during s_date ~ e_date (including RegularPlan)
+	# TODO: rename
+	# all plans planned during s_date ~ e_date
 	def planned(s_date, e_date)
 		plans = self.plans.order(:planned_at)
 			.where("planned_at >= ?", s_date)
@@ -48,7 +54,7 @@ class User < ActiveRecord::Base
 		return plans.group_by(&:planned_at)
 	end
 
-	# TODO: consider return format
+	# TODO: rename
 	def regular_planned(s_date, e_date)
 		result = {}
 		regular_plans = self.regular_plans.where("start_date <= ?", e_date)

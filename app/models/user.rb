@@ -9,13 +9,11 @@ class User < ActiveRecord::Base
 	has_many :categories
 
 	# TODO: handle `fixed_date` field
-	def fix_property(new_property)
+	def fix_property(new_property, fixed_date)
 		# TODO: these should be executed atmicly
 		current = self.property
-		if current != new_property
-			PropertyFixHistory.create(user: self, new_property: new_property)
-			self.update(property: new_property)
-		end
+		PropertyFixHistory.create(user: self, new_property: new_property, fixed_date: fixed_date)
+		self.update(property: new_property)
 	end
 
 	# TODO: remove

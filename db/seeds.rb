@@ -9,9 +9,13 @@
 # User
 User.destroy_all
 
-u = User.create(name: "test", email: "test@example.com", password: "12345678", property: 10000)
+u = User.create(name: "test", email: "test@example.com", password: "12345678")
 u.plans.destroy_all
 u.regular_plans.destroy_all
+
+u.fix_property(10000, Date.today - 3)
+u.fix_property(20000, Date.today + 3)
+u.fix_property(20000, Date.today + 10)
 
 # Category
 10.times do |i|

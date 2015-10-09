@@ -21,17 +21,31 @@ class UsersController < ApplicationController
 			end
 
 			if property
-				sum = 0
+				sum_income = 0
+				sum_expense = 0
+
 				if ps = plans[date]
-					sum += ps.inject(0){|r, i| r += i.amount}
+					ps.each do |e|
+						if (amount = e.amount) > 0
+							sum_income += amount
+						else
+							sum_expense += amount
+						end
+					end
 				end
 
 				if rps = regular_plans[date]
-					sum += rps.inject(0){|r, i| r += i.amount}
+					rps.each do |e|
+						if (amount = e.amount) > 0
+							sum_income += amount
+						else
+							sum_expense += amount
+						end
+					end
 				end
 
-				property += sum
-				transition[date] = [property, sum]
+				property += (sum_income + sum_expense)
+				transition[date] = [property, sum_income, sum_expense]
 			else
 				transition[date] = nil
 			end
@@ -52,17 +66,21 @@ class UsersController < ApplicationController
 
 		@balance_transition = __transition(current_user, @s_date, @e_date)
 
-		return 
+		dates = @balance_transition.map{|key, value| key if value}.compact
+		data = dates.map{|date| @balance_transition[date].first}
+		categories = dates.map{|e| e.strftime "%d"}
 
-		today = Date.today
-		e_date = (today - (today.day - 1)) + 1.month
+		@monthly_sum_income = 0
+		@monthly_sum_expense = 0
 
-		monthly_transition = @user.monthly_transition(today, e_date)
-		categories = monthly_transition.map{|e| e.first.strftime("%d")}
-		data = monthly_transition.map{|e| e.last}
+		@balance_transition.each do |key, value|
+			_, income, expense = *value
+			@monthly_sum_income += (income || 0)
+			@monthly_sum_expense += (expense|| 0)
+		end
 
-		@all_plans = current_user.plans.order(:planned_at).after_today.group_by(&:planned_at)
-		@property = current_user.property
+		@expected_balance = @balance_transition[@e_date].first
+
 		@graph = LazyHighCharts::HighChart.new("graph") do |f|
 			f.xAxis(categories: categories)
 			f.series(name: "残高", yAxis: 0, data: data)
@@ -108,6 +126,10 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+	def histories
+		render text: current_user.property_fix_histories.inspect and return
+	end
 
   private
     # Use callbacks to share common setup or constraints between actions.

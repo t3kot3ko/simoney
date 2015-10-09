@@ -5,7 +5,7 @@
 .row
   .col-md-4
     .alert.alert-dissmissable.alert-success
-      %h2 現在の資産
+      %h2 最新の資産修正
       %p.lead= @user.property.to_s + "円"
       - unless @user.property_fix_histories.empty?
         %p= "（最終更新：#{@user.property_fix_histories.last.created_at.strftime("%Y-%m-%d")} ）"
@@ -16,31 +16,21 @@
         %tbody
           %tr
             %th 収入
-            %td 10000
+            %td= @monthly_sum_income.to_s + "円"
           %tr
             %th 支出
-            %td 10000
+            %td= @monthly_sum_expense.to_s + "円"
           %tr
-            %th 見込み
-            %td 10000
-  .col-md-4
-    .alert.alert-dissmissable.alert-success
-      %h2 今週の支出予定
-      %table.table.table-bordered
-        %tbody
+            %th 合計
+            %td= (@monthly_sum_expense + @monthly_sum_income).to_s + "円"
           %tr
-            %th 収入
-            %td 10000
-          %tr
-            %th 支出
-            %td 10000
-          %tr
-            %th 見込み
-            %td 10000
-
+            %th 残高見込
+            %td= @expected_balance.to_s + "円"
 
 .row
-  %h3= "#{Date.today.month}月の収支計画 2"
+  %h3= "#{Date.today.month}月の収支計画"
+  .col-md-12
+    = high_chart("sample", @graph)
   .col-md-12
     %table.table.table-bordered
       %tbody
@@ -82,7 +72,8 @@
                   %strong= amount.abs
                   円
               - if transition = @balance_transition[date]
-                - balance, sum = *transition
+                - balance, sum_income, sum_expense = *transition
+                - sum = sum_income + sum_expense
                 // 小計
                 - if sum > 0
                   %td.text-info(rowspan="#{plans.count + regular_plans.count}")

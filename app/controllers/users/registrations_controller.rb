@@ -16,7 +16,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
 		@user = User.new(params.require(:user).permit(:email, :password, :name, :property))
 
-		if saved = @user.save!
+		if saved = @user.save
 			# Custom fields
 			@user.update(name: params[:user][:name])
 			@user.fix_property(params[:user][:property])

@@ -3,10 +3,21 @@ class RegularPlan < ActiveRecord::Base
   belongs_to :user
 	belongs_to :category
 
+	# TODO: tentative
+	def description
+		""
+	end
+
+	# TODO: validate to ensure start_date < end_date
+
 	def adapted?(date)
 		start_date = self.start_date
 
 		return false if start_date > date
+
+		if end_date && date > end_date
+			return false
+		end
 
 		if self.daily?
 			true

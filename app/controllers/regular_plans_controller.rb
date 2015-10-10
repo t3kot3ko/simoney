@@ -108,6 +108,6 @@ class RegularPlansController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def regular_plan_params
-      params.require(:regular_plan).permit(:category_id, :amount, :start_date, :kind)
+			params.require(:regular_plan).permit(:category_id, :amount, :start_date, :kind, :end_date)
     end
 end

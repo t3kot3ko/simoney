@@ -9,7 +9,9 @@
 %table.table.table-striped
   %tbody
     %tr
-      %th 開始日と間隔
+      %th 開始日
+      %th 間隔
+      %th 終了日
       %th カテゴリ
       %th 収支計画
       %th
@@ -17,7 +19,12 @@
 
     - @regular_plans.order(:start_date).each do |plan|
       %tr
-        %td= interval_string(plan)
+        %td= plan.start_date.strftime("%Y/%m/%d") + " から"
+        %td= plan.interval
+        - if end_date = plan.end_date
+          %td= plan.end_date.strftime("%Y/%m/%d") + " まで"
+        - else
+          %td （終了日未定）
         %td= plan.category.name
         - if plan.amount > 0
           %td.text-info
@@ -28,7 +35,7 @@
             %strong= plan.amount
             円
 
-        %td= link_to("編集", edit_user_regular_plan_path(plan))
-        %td= link_to("削除", user_regular_plan_path(plan), method: :delete, data: {confirm: "Are you sure to delete?"})
+        %td= link_to("編集", edit_user_regular_plan_path(plan), class: "btn btn-default btn-xs")
+        %td= link_to("削除", user_regular_plan_path(plan), method: :delete, data: {confirm: "Are you sure to delete?"}, class: "btn btn-danger btn-xs")
 
 = link_to 'New Regular plan', new_user_regular_plan_path

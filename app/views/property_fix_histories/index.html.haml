@@ -1,0 +1,14 @@
+.page-header
+  %h1 資産更新履歴
+
+%table.table.table-striped
+  %tbody
+    %tr
+      %th 更新日
+      %th 更新後の金額
+      %th 登録日
+    - @property_fix_histories.each do |history|
+      %tr
+        %td= history.fixed_date.strftime("%Y/%m/%d")
+        %td= history.new_property.to_s + "円"
+        %td= history.created_at.strftime("%Y/%m/%d")

@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
 	root to: 'home#index'
 
   # devise_for :users
@@ -13,7 +12,7 @@ Rails.application.routes.draw do
 
 	resource :user,  path: "my" do 
 		resources :regular_plans
-		resources :property_fix_histories
+		resources :property_fix_histories, as: :histories
 		resources :plans
 		resources :categories
 

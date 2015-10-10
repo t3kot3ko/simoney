@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-	before_action :authenticate_user!
+	before_action :authenticate_user!, except: []
   before_action :set_user
 
   # GET /users/1
@@ -90,10 +90,6 @@ class UsersController < ApplicationController
 	def list
 		@all_plans = current_user.plans.order(:planned_at).after_today.group_by(&:planned_at)
 		@property = current_user.property
-	end
-
-	def history
-		@history = @user
 	end
 
   # GET /users/new

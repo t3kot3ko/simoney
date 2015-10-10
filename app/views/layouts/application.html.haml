@@ -38,6 +38,7 @@
               %li= link_to "Plans", {controller: :plans, action: :index}
               %li= link_to "Regular Plans", {controller: :regular_plans, action: :index}
               %li= link_to "Categories", {controller: :categories, action: :index}
+              %li= link_to "Histories", {controller: :property_fix_histories, action: :index}
           %ul.nav.navbar-nav.navbar-right
             - if user_signed_in?
               %li.dropdown 

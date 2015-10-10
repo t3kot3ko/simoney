@@ -1,0 +1,2 @@
+module PropertyFixHistoriesHelper
+end

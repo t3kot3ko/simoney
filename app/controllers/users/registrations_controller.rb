@@ -19,7 +19,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 		if saved = @user.save
 			# Custom fields
 			@user.update(name: params[:user][:name])
-			@user.fix_property(params[:user][:property])
+			@user.fix_property(params[:user][:property], Date.today)
 
 			sign_in @user
 			redirect_to controller: "/users", action: :dashboard

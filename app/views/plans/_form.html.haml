@@ -4,6 +4,10 @@
     .col-sm-6
       = f.select :category_id, @selector_options, {}, {class: 'form-control'}
   .form-group
+    %label.col-lg-2.control-label 詳細
+    .col-sm-6
+      = f.text_field :description, class: 'form-control', required: false
+  .form-group
     %label.col-lg-2.control-label 金額
     .col-sm-6
       = f.text_field :amount, class: 'form-control', required: true

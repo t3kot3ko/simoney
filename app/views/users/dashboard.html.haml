@@ -38,6 +38,7 @@
           %th 計画日
           %th 定期
           %th カテゴリ
+          %th 詳細
           %th 金額
           %th 小計
           %th 残高
@@ -46,7 +47,7 @@
           - if @history[date] && (h = @history[date].first)
             %tr.danger
               %td= date.strftime("%m/%d (%a)")
-              %td(colspan=2) 残高修正
+              %td(colspan=3) 残高修正
               %td= h.new_property
               %td -
               %td= h.new_property
@@ -61,6 +62,7 @@
 
               %td= plan.interval
               %td= plan.category.name
+              %td= plan.description
               - if (amount = plan.amount) > 0
                 %td.text-info 
                   %span.glyphicon.glyphicon-plus

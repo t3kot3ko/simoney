@@ -89,6 +89,6 @@ class PlansController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def plan_params
-			params[:plan].permit(:category_id, :amount, :planned_at)
+			params[:plan].permit(:category_id, :description, :amount, :planned_at)
     end
 end

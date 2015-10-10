@@ -13,6 +13,7 @@
     %tr
       %th 計画日
       %th カテゴリ
+      %th 詳細
       %th 収支計画
       %th 
       %th 
@@ -20,6 +21,7 @@
       %tr
         %td= plan.planned_at
         %td= plan.category.name
+        %td= plan.description
         - if plan.amount > 0
           %td.text-info 
             %strong= plan.amount

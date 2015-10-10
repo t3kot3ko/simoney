@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151007132705) do
+ActiveRecord::Schema.define(version: 20151010062751) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name"
@@ -24,9 +24,10 @@ ActiveRecord::Schema.define(version: 20151007132705) do
     t.integer  "user_id"
     t.integer  "amount"
     t.date     "planned_at"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.integer  "category_id"
+    t.string   "description", default: ""
   end
 
   create_table "property_fix_histories", force: :cascade do |t|

@@ -35,11 +35,12 @@ end
 # Regular plan
 
 # monthly
-RegularPlan.create(user: u, kind: :monthly, category: u.categories.sample, amount: 200000, start_date: this_month_first + 25)
+RegularPlan.create(user: u, kind: :monthly, category: u.categories.sample, amount: 300000, start_date: this_month_first + 25)
 RegularPlan.create(user: u, kind: :monthly, category: u.categories.sample, amount: -15000, start_date: this_month_first + 10)
+RegularPlan.create(user: u, kind: :monthly, category: u.categories.sample, amount: -85000, start_date: this_month_first + 10)
 
 # Weekly
 RegularPlan.create(user: u, kind: :weekly, category: u.categories.sample, amount: 4000, start_date: this_month_first)
 
 # Daily
-RegularPlan.create(user: u, kind: :daily, category: u.categories.sample, amount: 100 + rand(100), start_date: this_month_first)
+RegularPlan.create(user: u, kind: :daily, category: u.categories.sample, amount: -(100 + rand(100)), start_date: this_month_first)

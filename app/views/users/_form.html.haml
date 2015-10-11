@@ -9,11 +9,6 @@
     .col-sm-6
       = f.text_field :email, class: 'form-control', required: true, disabled: true
       = error_span(@user[:email])
-  .form-group
-    %label.col-lg-2.control-label 現在の資産
-    .col-sm-6
-      = f.text_field :property, class: 'form-control', required: true
-      = error_span(@user[:property])
 
   = f.submit "更新", class: 'btn btn-primary'
   = link_to t('.cancel', :default => t("helpers.links.cancel")), dashboard_user_path, :class => 'btn btn-default'

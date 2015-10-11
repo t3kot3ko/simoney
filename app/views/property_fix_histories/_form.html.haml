@@ -1,10 +1,11 @@
-= form_for @property_fix_history do |f|
-  - if @property_fix_history.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@property_fix_history.errors.count, "error")} prohibited this property_fix_history from being saved:"
-      %ul
-        - @property_fix_history.errors.full_messages.each do |msg|
-          %li= msg
+= form_for @property_fix_history, url: {controller: :property_fix_histories, action: @property_fix_history.persisted? ? :update : :create}, html: { class: "form-horizontal"} do |f|
+  .form-group
+    %label.col-lg-2.control-label 新しい資産
+    .col-sm-6
+      = f.text_field :new_property, class: 'form-control', required: true
+  .form-group
+    %label.col-lg-2.control-label 適用日
+    .col-sm-6
+      = f.text_field :fixed_date, class: 'form-control', required: true, id: "picker_fixed_date"
 
-  .actions
-    = f.submit 'Save'
+  = f.submit @property_fix_history.persisted? ? "更新" : "作成", class: 'btn btn-primary'

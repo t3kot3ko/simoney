@@ -20,10 +20,13 @@ class PropertyFixHistoriesController < ApplicationController
   # POST /property_fix_histories
   # POST /property_fix_histories.json
   def create
-    @property_fix_history = PropertyFixHistory.new(property_fix_history_params)
+		new_property = property_fix_history_params[:new_property]
+		fixed_date = property_fix_history_params[:fixed_date]
+
+		result = current_user.fix_property(new_property, fixed_date)
 
     respond_to do |format|
-      if @property_fix_history.save
+      if result
         format.html { redirect_to user_histories_path, notice: 'Property fix history was successfully created.' }
         format.json { render :show, status: :created, location: @property_fix_history }
       else
@@ -65,6 +68,6 @@ class PropertyFixHistoriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def property_fix_history_params
-      params[:property_fix_history]
+			params.require(:property_fix_history).permit(:new_property, :fixed_date)
     end
 end

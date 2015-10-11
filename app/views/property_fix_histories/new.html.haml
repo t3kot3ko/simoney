@@ -1,5 +1,7 @@
-%h1 New property_fix_history
+%h1 資産の更新
+
+%ul.nav.nav-tabs
+  %li= link_to("更新履歴一覧", {action: :index})
+  %li.active= link_to("資産を更新する", {action: :new})
 
 = render 'form'
-
-= link_to 'Back', property_fix_histories_path

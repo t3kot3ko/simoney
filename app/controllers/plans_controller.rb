@@ -35,6 +35,10 @@ class PlansController < ApplicationController
 
   # GET /plans/new
   def new
+		if current_user.categories.empty?
+			redirect_to new_user_category_path, alert: "You have to at least one category" and return
+		end
+
     @plan = Plan.new
   end
 

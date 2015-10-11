@@ -52,6 +52,10 @@ class RegularPlansController < ApplicationController
 
   # GET /regular_plans/new
   def new
+		if current_user.categories.empty?
+			redirect_to new_user_category_path, alert: "You have to at least one category" and return
+		end
+
     @regular_plan = RegularPlan.new
   end
 
